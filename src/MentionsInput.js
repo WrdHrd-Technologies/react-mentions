@@ -1,4 +1,7 @@
 import React, { Children } from 'react'
+import ReactDOM from 'react-dom'
+import PropTypes from 'prop-types'
+
 import {
   applyChangeToValue,
   countSuggestions,
@@ -18,12 +21,10 @@ import {
   omit,
   getSuggestionHtmlId,
 } from './utils'
-
 import Highlighter from './Highlighter'
-import PropTypes from 'prop-types'
-import ReactDOM from 'react-dom'
 import SuggestionsOverlay from './SuggestionsOverlay'
 import { defaultStyle } from './utils'
+import { DEFAULT_MENTION_PROPS } from './Mention'
 
 export const makeTriggerRegex = function(trigger, options = {}) {
   if (trigger instanceof RegExp) {
@@ -65,11 +66,10 @@ const KEY = { TAB: 9, RETURN: 13, ESC: 27, UP: 38, DOWN: 40 }
 
 let isComposing = false
 
+/**
+ * TODO: convert to interface/type when TS is available
+ */
 const propTypes = {
-  /**
-   * If set to `true` a regular text input element will be rendered
-   * instead of a textarea
-   */
   singleLine: PropTypes.bool,
   allowSpaceInQuery: PropTypes.bool,
   allowSuggestionsAboveCursor: PropTypes.bool,
@@ -105,7 +105,6 @@ const propTypes = {
 }
 
 class MentionsInput extends React.Component {
-  static propTypes = propTypes
 
   static defaultProps = {
     ignoreAccents: false,
@@ -1008,10 +1007,10 @@ class MentionsInput extends React.Component {
     const config = readConfigFromChildren(this.props.children)
     const mentionsChild = Children.toArray(this.props.children)[childIndex]
     const {
-      markup,
-      displayTransform,
-      appendSpaceOnAdd,
-      onAdd,
+      markup = DEFAULT_MENTION_PROPS.markup,
+      displayTransform = DEFAULT_MENTION_PROPS.displayTransform,
+      appendSpaceOnAdd = DEFAULT_MENTION_PROPS.appendSpaceOnAdd,
+      onAdd = DEFAULT_MENTION_PROPS.onAdd,
     } = mentionsChild.props
 
     const start = mapPlainTextIndex(value, config, querySequenceStart, 'START')
